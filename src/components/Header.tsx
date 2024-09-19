@@ -2,10 +2,11 @@ import { Link } from "react-router-dom"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { IoBagOutline, IoHeartOutline } from "react-icons/io5"
+import { memo } from "react"
 
-export const Header = () => {
+export const Header = memo(() => {
   return (
-    <header className="py-4 px-8 flex justify-between items-center border-b fixed top-0 left-0 right-0 bg-white bg-opacity-75 backdrop-blur-md z-50">
+    <header className="px-8 flex justify-between h-20 items-center border-b fixed top-0 left-0 right-0 bg-white bg-opacity-75 backdrop-blur-md z-50">
       <Link to={'/'}>
         <p className="text-2xl font-bold hover:cursor-pointer">Logo</p>
       </Link>
@@ -28,4 +29,4 @@ export const Header = () => {
       </div>
     </header>
   )
-}
+})
