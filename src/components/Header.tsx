@@ -23,8 +23,12 @@ export const Header = memo(() => {
           </Button>
         </div>
         <div className="flex gap-2">
-          <Button>Login</Button>
-          <Button variant={"outline"}>Signin</Button>
+          <Link to={'/login'}>
+            <Button>Login</Button>
+          </Link>
+          <Link to={'/register'}>
+            <Button variant={"outline"}>Signin</Button>
+          </Link>
         </div>
       </div>
     </header>
