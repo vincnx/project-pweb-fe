@@ -5,29 +5,36 @@ import { Footer } from "./components/Footer"
 import { Header } from "./components/Header"
 import ProductPage from "./pages/ProductPage"
 import LoginPage from "./pages/LoginPage"
-import RegisterPage from "./pages/registerPage"
+import RegisterPage from "./pages/RegisterPage"
+import CartPage from "./pages/CartPage"
 
 
 function App() {
   const location = useLocation()
 
-  const showHeaderFooter = !(
+  const showHeader = !(
     location.pathname === '/login' ||
     location.pathname === '/register'
+  )
+  const showFooter = !(
+    location.pathname === '/login' ||
+    location.pathname === '/register' ||
+    location.pathname === '/cart'
   )
 
   return (
     <>
-      {showHeaderFooter && <Header />}
+      {showHeader && <Header />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
+        <Route path="/cart" element={<CartPage />} />
         <Route path="/product" element={<ProductsPage />} />
         <Route path="/product/:productId" element={<ProductPage />} />
       </Routes>
-      {showHeaderFooter && <Footer />}
+      {showFooter && <Footer />}
     </>
   )
 }
