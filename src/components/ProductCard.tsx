@@ -3,7 +3,7 @@ import { Button } from "./ui/button"
 import { Skeleton } from "./ui/skeleton"
 import { IoIosArrowBack, IoIosArrowForward, IoMdHeart } from "react-icons/io"
 import { Link } from "react-router-dom"
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, useCallback } from "react"
 import { Product } from "@/types/product"
 import { formatRupiah } from "@/lib/helpers"
 
@@ -24,6 +24,11 @@ export const ProductCard = ({ className, product }: { className?: string, produc
               <div>
                 <p className="font-medium line-clamp-2 h-12">{product.name}</p>
                 <p className='text-xl font-semibold mt-1'>{formatRupiah(product.price)}</p>
+                {
+                  product.discount > 0 && (
+                    <p className='text-sm text-red-400 line-through'>{formatRupiah(product.price + product.discount)}</p>
+                  )
+                }
               </div>
               <p className='text-muted-foreground text-sm mt-2'>Sisa Stok: {product.stock}</p>
             </div>
@@ -43,44 +48,51 @@ export const ProductCard = ({ className, product }: { className?: string, produc
   )
 }
 
-export const ProductCardGroup = ({ title, titleLink }: { title: string, titleLink: string }) => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [isAtStart, setIsAtStart] = useState(true);
-  const [isAtEnd, setIsAtEnd] = useState(false);
 
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -400, behavior: 'smooth' });
-    }
-  };
+export const ProductCardGroup = ({ title, titleLink, data, isPending, isFetching }: { title: string, titleLink: string, data: Product[], isPending: boolean, isFetching: boolean }) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [isLeftDisabled, setIsLeftDisabled] = useState(true)
+  const [isRightDisabled, setIsRightDisabled] = useState(false)
 
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 400, behavior: 'smooth' });
+  const handleScroll = useCallback(() => {
+    const container = scrollContainerRef.current
+    if (container) {
+      const isAtStart = container.scrollLeft <= 0
+      const isAtEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 1
+
+      setIsLeftDisabled(isAtStart)
+      setIsRightDisabled(isAtEnd)
     }
-  };
+  }, [])
+
+  const checkScrollState = useCallback(() => {
+    handleScroll()
+    setTimeout(handleScroll, 100)
+  }, [handleScroll])
+
+  const scroll = (direction: 'left' | 'right') => {
+    const container = scrollContainerRef.current
+    if (container) {
+      const scrollAmount = container.clientWidth
+      container.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      })
+    }
+  }
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (scrollContainerRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-        setIsAtStart(scrollLeft === 0);
-        setIsAtEnd(scrollLeft + clientWidth >= scrollWidth);
-      }
-    };
-
-    const container = scrollContainerRef.current;
+    const container = scrollContainerRef.current
     if (container) {
-      container.addEventListener('scroll', handleScroll);
-      handleScroll();
+      container.addEventListener('scroll', handleScroll)
+      checkScrollState()
     }
+    return () => container?.removeEventListener('scroll', handleScroll)
+  }, [handleScroll, checkScrollState])
 
-    return () => {
-      if (container) {
-        container.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
+  useEffect(() => {
+    checkScrollState()
+  }, [data, isPending, isFetching, checkScrollState])
 
   return (
     <>
@@ -90,32 +102,39 @@ export const ProductCardGroup = ({ title, titleLink }: { title: string, titleLin
         </Link>
         <div className="flex items-center gap-2">
           <Button
-            variant={isAtStart ? "outline" : "secondary"}
+            variant={isLeftDisabled ? "outline" : "secondary"}
             className="w-12 h-12 rounded-full flex items-center justify-center"
-            onClick={scrollLeft}
-            disabled={isAtStart}
+            onClick={() => scroll('left')}
+            disabled={isLeftDisabled}
           >
             <IoIosArrowBack className="w-6 h-6" />
           </Button>
           <Button
-            variant={isAtEnd ? "outline" : "secondary"}
+            variant={isRightDisabled ? "outline" : "secondary"}
             className="w-12 h-12 rounded-full flex items-center justify-center"
-            onClick={scrollRight}
-            disabled={isAtEnd}
+            onClick={() => scroll('right')}
+            disabled={isRightDisabled}
           >
             <IoIosArrowForward className="w-8 h-8" />
           </Button>
         </div>
       </div>
-      <div ref={scrollContainerRef} className="flex gap-2 md:gap-4 overflow-x-scroll">
-        <ProductCard className="min-w-64" />
-        <ProductCard className="min-w-64" />
-        <ProductCard className="min-w-64" />
-        <ProductCard className="min-w-64" />
-        <ProductCard className="min-w-64" />
-        <ProductCard className="min-w-64" />
-        <ProductCard className="min-w-64" />
-        <ProductCard className="min-w-64" />
+      <div
+        ref={scrollContainerRef}
+        className="flex gap-2 md:gap-4 overflow-x-scroll scrollbar-hide"
+      >
+        {isPending || isFetching ? (
+          <>
+            <ProductCardSkeleton />
+            <ProductCardSkeleton />
+            <ProductCardSkeleton />
+            <ProductCardSkeleton />
+          </>
+        ) : (
+          data.map((product: Product) => (
+            <ProductCard key={product.id} product={product} className="min-w-48 md:min-w-72" />
+          ))
+        )}
       </div>
     </>
   )

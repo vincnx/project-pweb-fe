@@ -1,15 +1,16 @@
 import { axiosInstance } from "@/lib/axios"
 import { useQuery } from "@tanstack/react-query"
 
-export const useFetchProducts = (params?: { sort?: string; minPrice?: number; maxPrice?: number }) => {
+export const useFetchProducts = (params?: { sort?: string; minPrice?: number; maxPrice?: number; isDiscount?: boolean }) => {
   return useQuery({
-    queryKey: ['fetch.products', params?.sort, params?.minPrice, params?.maxPrice],
+    queryKey: ['fetch.products', params?.sort, params?.minPrice, params?.maxPrice, params?.isDiscount],
     queryFn: async () => {
       const response = await axiosInstance.get('/products', {
         params: {
           _sort: params?.sort === 'asc' ? 'price' : params?.sort === 'desc' ? '-price' : '',
           price_gte: params?.minPrice,
           price_lt: params?.maxPrice,
+          discount_gte: params?.isDiscount ? 1 : 0,
         },
       });
       return response.data;
