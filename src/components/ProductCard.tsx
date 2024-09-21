@@ -1,29 +1,36 @@
 import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
+import { Skeleton } from "./ui/skeleton"
 import { IoIosArrowBack, IoIosArrowForward, IoMdHeart } from "react-icons/io"
 import { Link } from "react-router-dom"
 import { useRef, useState, useEffect } from "react"
+import { Product } from "@/types/product"
+import { formatRupiah } from "@/lib/helpers"
 
-export const ProductCard = ({ className }: { className?: string }) => {
+export const ProductCard = ({ className, product }: { className?: string, product: Product }) => {
   return (
-    <div className={cn("w-full", className)}>
-      <div className='p-2 border rounded-md flex flex-col gap-4'>
-        <Link to={'/product/1'}>
-          <div className='aspect-square w-full rounded-md'>
-            <img src={'https://placehold.co/600x400/EEE/31343C'} alt="product" className='w-full h-full object-cover' />
+    <div className={className}>
+      <div className='p-2 border rounded-md flex flex-col gap-4 h-full'>
+        <Link to={`/product/${product.id}`} className="flex flex-col h-full">
+          <div className='aspect-square w-full rounded-md overflow-hidden'>
+            <img
+              src={product.image}
+              alt={product.name}
+              className='w-full h-full object-cover rounded-md'
+            />
           </div>
-          <div>
-            <div className='flex flex-col md:flex-row justify-between mt-2'>
+          <div className="flex flex-col flex-grow">
+            <div className='flex flex-col justify-between mt-2 flex-grow'>
               <div>
-                <p className='text-md'>Judul</p>
-                <p className='text-xl font-semibold'>Rp. 10.000</p>
+                <p className="font-medium line-clamp-2 h-12">{product.name}</p>
+                <p className='text-xl font-semibold mt-1'>{formatRupiah(product.price)}</p>
               </div>
-              <p className='text-muted-foreground text-sm'>Sisa Stok: 5</p>
+              <p className='text-muted-foreground text-sm mt-2'>Sisa Stok: {product.stock}</p>
             </div>
-            <p className='text-sm text-muted-foreground text-justify hidden md:block mt-2'>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+            <p className='text-sm text-muted-foreground text-justify hidden md:block mt-2 line-clamp-3'>{product.description}</p>
           </div>
         </Link>
-        <div className="gap-2 hidden md:flex">
+        <div className="gap-2 hidden md:flex mt-auto">
           <Button className="flex-1">
             Tambahkan ke Keranjang
           </Button>
@@ -111,5 +118,31 @@ export const ProductCardGroup = ({ title, titleLink }: { title: string, titleLin
         <ProductCard className="min-w-64" />
       </div>
     </>
+  )
+}
+
+export const ProductCardSkeleton = ({ className }: { className?: string }) => {
+  return (
+    <div className={cn("w-full", className)}>
+      <div className='p-2 border rounded-md flex flex-col gap-4 h-full'>
+        <div className="flex flex-col h-full">
+          <Skeleton className="aspect-square w-full rounded-md" />
+          <div className="flex flex-col flex-grow">
+            <div className='flex flex-col justify-between mt-2 flex-grow'>
+              <div>
+                <Skeleton className="h-4 w-3/4 mt-2" />
+                <Skeleton className="h-6 w-1/2 mt-1" />
+              </div>
+              <Skeleton className="h-4 w-1/4 mt-2" />
+            </div>
+            <Skeleton className="h-6 w-full mt-2 hidden md:block" />
+          </div>
+        </div>
+        <div className="gap-2 hidden md:flex mt-auto">
+          <Skeleton className="h-10 flex-1" />
+          <Skeleton className="h-10 w-10" />
+        </div>
+      </div>
+    </div>
   )
 }
