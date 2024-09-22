@@ -81,5 +81,12 @@
       "description": "Sabun merk Lifebuoy 100 gram",
       "image": "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/lifebuoy_lifebuoy-sabun-batangan_full02.jpg"
     }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "password"
+    }
   ]
 }

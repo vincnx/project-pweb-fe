@@ -7,10 +7,12 @@ import ProductPage from "./pages/ProductPage"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import CartPage from "./pages/CartPage"
+import { useUserHydration } from "./hooks/useUserHydration"
 
 
 function App() {
   const location = useLocation()
+  const { isHydrated } = useUserHydration()
 
   const showHeader = !(
     location.pathname === '/login' ||
@@ -21,6 +23,8 @@ function App() {
     location.pathname === '/register' ||
     location.pathname === '/cart'
   )
+
+  if (!isHydrated) return <div>Loading...</div>
 
   return (
     <>

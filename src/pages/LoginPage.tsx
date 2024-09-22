@@ -2,13 +2,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import { useLogin } from "@/services/auth.service"
 
 const loginFormSchema = z.object({
   username: z.string().min(3, 'Username minimal 3 karakter'),
@@ -28,8 +29,14 @@ const LoginPage = () => {
     reValidateMode: 'onChange'
   })
 
+  const loginMutation = useLogin()
+  const navigate = useNavigate()
   const handleLogin = async (values: { username: string, password: string }) => {
-    alert(JSON.stringify(values))
+    loginMutation.mutate(values, {
+      onSuccess: () => {
+        navigate('/')
+      }
+    })
   }
 
   return (
