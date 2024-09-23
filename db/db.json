@@ -5,7 +5,7 @@
       "name": "Minyak Goreng Bimoli",
       "price": 52800,
       "discount": 1000,
-      "stock": 100,
+      "stock": 5,
       "description": "Minyak Goreng pouch merk Bimoli 2000 ml",
       "image": "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/UK-0048989/bimoli_bimoli-minyak-goreng-pouch--2000-ml-_full04.jpg"
     },
@@ -124,6 +124,12 @@
       "userId": "9508",
       "productId": "2",
       "quantity": 1
+    },
+    {
+      "id": "a321",
+      "userId": "1",
+      "productId": "5",
+      "quantity": 10
     }
   ]
 }
