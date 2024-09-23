@@ -6,8 +6,22 @@ import { Link } from "react-router-dom"
 import { useRef, useState, useEffect, useCallback } from "react"
 import { Product } from "@/types/product"
 import { formatRupiah } from "@/lib/helpers"
+import { useAddToCart } from "@/services/cart.service"
+import { RootState } from "@/store/store"
+import { useSelector } from "react-redux"
 
 export const ProductCard = ({ className, product }: { className?: string, product: Product }) => {
+  const userSelector = useSelector((state: RootState) => state.user)
+  const addToCartMutation = useAddToCart()
+
+  const handleAddToCart = () => {
+    addToCartMutation.mutate({
+      userId: userSelector.id,
+      productId: product.id,
+      quantity: 1
+    })
+  }
+
   return (
     <div className={className}>
       <div className='p-2 border rounded-md flex flex-col gap-4 h-full'>
@@ -36,7 +50,7 @@ export const ProductCard = ({ className, product }: { className?: string, produc
           </div>
         </Link>
         <div className="gap-2 hidden md:flex mt-auto">
-          <Button className="flex-1">
+          <Button className="flex-1" onClick={handleAddToCart}>
             Tambahkan ke Keranjang
           </Button>
           <Button variant={"outline"} size={"icon"}>
@@ -47,7 +61,6 @@ export const ProductCard = ({ className, product }: { className?: string, produc
     </div>
   )
 }
-
 
 export const ProductCardGroup = ({ title, titleLink, data, isPending, isFetching }: { title: string, titleLink: string, data: Product[], isPending: boolean, isFetching: boolean }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)

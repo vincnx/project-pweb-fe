@@ -93,5 +93,37 @@
       "username": "admin2",
       "password": "password"
     }
+  ],
+  "carts": [
+    {
+      "id": "1",
+      "userId": "9508",
+      "productId": "1",
+      "quantity": 1
+    },
+    {
+      "id": "2",
+      "userId": "9508",
+      "productId": "2",
+      "quantity": 1
+    },
+    {
+      "id": "f790",
+      "userId": "9508",
+      "productId": "5",
+      "quantity": 1
+    },
+    {
+      "id": "023a",
+      "userId": "9508",
+      "productId": "7",
+      "quantity": 1
+    },
+    {
+      "id": "39c5",
+      "userId": "9508",
+      "productId": "2",
+      "quantity": 1
+    }
   ]
 }
