@@ -28,6 +28,21 @@ export const useLogin = () => {
 
 }
 
+export const useRegister = () => {
+  const dispatch = useDispatch()
+
+  return useMutation({
+    mutationFn: async ({ username, password }: { username: string; password: string }) => {
+      const response = await axiosInstance.post('/users', { username, password })
+      return response.data
+    },
+    onSuccess: (data) => {
+      localStorage.setItem('user', data.id)
+      dispatch(login(data))
+    }
+  })
+}
+
 export const useGetUserById = (id: string) => {
   return useQuery({
     queryKey: ['user', id],

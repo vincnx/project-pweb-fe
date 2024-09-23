@@ -5,14 +5,15 @@ import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useRegister } from "@/services/auth.service"
 
 const RegisterFormSchema = z.object({
-  username: z.string().min(3, 'Username must be at least 3 characters'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  username: z.string().min(3, 'Username minimal 3 karakter'),
+  password: z.string().min(8, 'Password minimal 8 karakter'),
   confirmPassword: z.string()
 }).refine((data) => data.password === data.confirmPassword, {
-  message: "Password don't match",
+  message: "Password tidak sama",
   path: ["confirmPassword"],
 })
 
@@ -28,9 +29,15 @@ const RegisterPage = () => {
     reValidateMode: 'onChange'
   })
 
-  const handleRegister = async (values: { username: string, password: string, confirmPassword: string }) => {
-    alert(JSON.stringify(values))
+  const registerMutation = useRegister()
+  const navigate = useNavigate()
 
+  const handleRegister = async (values: { username: string, password: string, confirmPassword: string }) => {
+    registerMutation.mutate(values, {
+      onSuccess: () => {
+        navigate('/')
+      }
+    })
   }
 
   return (

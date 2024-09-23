@@ -1,7 +1,7 @@
 {
   "products": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Minyak Goreng Bimoli",
       "price": 52800,
       "discount": 1000,
@@ -10,7 +10,7 @@
       "image": "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/UK-0048989/bimoli_bimoli-minyak-goreng-pouch--2000-ml-_full04.jpg"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Gula Pasir Gulaku",
       "price": 12000,
       "discount": 0,
@@ -19,7 +19,7 @@
       "image": "https://down-id.img.susercontent.com/file/0d944e40802f51f5c1e6970218eb6a5e"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Beras Sania 5kg",
       "price": 74500,
       "discount": 1000,
@@ -28,7 +28,7 @@
       "image": "https://solvent-production.s3.amazonaws.com/media/images/products/2021/06/DSC_0074_copy_MGum30k.jpg"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Tepung Terigu segitiga biru",
       "price": 14900,
       "discount": 0,
@@ -37,7 +37,7 @@
       "image": "https://solvent-production.s3.amazonaws.com/media/images/products/2021/04/2030a.jpg"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Telur",
       "price": 20000,
       "discount": 500,
@@ -46,7 +46,7 @@
       "image": "https://i2.wp.com/www.poultryindonesia.com/wp-content/uploads/2021/05/Gambar-1-1.jpg?fit=1664%2C1111&ssl=1"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Mie Instan Indomie Goreng",
       "price": 4100,
       "discount": 0,
@@ -55,7 +55,7 @@
       "image": "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//93/MTA-2583228/indomie_indomie-goreng-mie-instan--85g--_full02.jpg"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "Mie Instan Indomie Kari Ayam",
       "price": 4100,
       "discount": 500,
@@ -64,7 +64,7 @@
       "image": "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//90/MTA-3452751/indomie_indomie-kari-ayam-mie-instant--60-g-_full02.jpg"
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Sabun LUX Lily Fresh",
       "price": 12000,
       "discount": 3000,
@@ -73,7 +73,7 @@
       "image": "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//88/MTA-2720057/lux_lux-lily-fresh-sabun-batang--80-g-_full02.jpg"
     },
     {
-      "id": 9,
+      "id": "9",
       "name": "Sabun Lifebuoy",
       "price": 7000,
       "discount": 1000,
@@ -84,8 +84,13 @@
   ],
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "username": "admin",
+      "password": "password"
+    },
+    {
+      "id": "9508",
+      "username": "admin2",
       "password": "password"
     }
   ]
