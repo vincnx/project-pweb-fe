@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import CartPage from "./pages/CartPage"
 import { useUserHydration } from "./hooks/useUserHydration"
+import DashboardPage from "./pages/admin/DashboardPage"
 
 
 function App() {
@@ -16,12 +17,14 @@ function App() {
 
   const showHeader = !(
     location.pathname === '/login' ||
-    location.pathname === '/register'
+    location.pathname === '/register' ||
+    location.pathname.startsWith('/admin')
   )
   const showFooter = !(
     location.pathname === '/login' ||
     location.pathname === '/register' ||
-    location.pathname === '/cart'
+    location.pathname === '/cart' ||
+    location.pathname.startsWith('/admin')
   )
 
   if (!isHydrated) return <div>Loading...</div>
@@ -37,6 +40,11 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/product" element={<ProductsPage />} />
         <Route path="/product/:productId" element={<ProductPage />} />
+
+        <Route path="/admin">
+          <Route path="" element={<DashboardPage />} />
+        </Route>
+
       </Routes>
       {showFooter && <Footer />}
     </>
