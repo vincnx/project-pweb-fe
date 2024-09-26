@@ -1,6 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom"
 import HomePage from "./pages/HomePage"
 import ProductsPage from "./pages/ProductsPage"
+import AdminProductsPage from "./pages/admin/products/ProductsPage"
 import { Footer } from "./components/Footer"
 import { Header } from "./components/Header"
 import ProductPage from "./pages/ProductPage"
@@ -43,6 +44,7 @@ function App() {
 
         <Route path="/admin">
           <Route path="" element={<DashboardPage />} />
+          <Route path="product" element={<AdminProductsPage />} />
         </Route>
 
       </Routes>
