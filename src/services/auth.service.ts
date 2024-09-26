@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux"
 interface User {
   id: string
   username: string
+  role: string
 }
 
 export const useLogin = () => {

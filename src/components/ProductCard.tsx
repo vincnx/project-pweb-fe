@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { Skeleton } from "./ui/skeleton"
 import { IoIosArrowBack, IoIosArrowForward, IoMdHeart } from "react-icons/io"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useRef, useState, useEffect, useCallback } from "react"
 import { Product } from "@/types/product"
 import { formatRupiah } from "@/lib/helpers"
@@ -12,9 +12,14 @@ import { useSelector } from "react-redux"
 
 export const ProductCard = ({ className, product }: { className?: string, product: Product }) => {
   const userSelector = useSelector((state: RootState) => state.user)
+  const navigate = useNavigate()
   const addToCartMutation = useAddToCart()
 
   const handleAddToCart = () => {
+    if (!userSelector.id) {
+      return navigate('/login')
+    }
+
     addToCartMutation.mutate({
       userId: userSelector.id,
       productId: product.id,
@@ -37,10 +42,10 @@ export const ProductCard = ({ className, product }: { className?: string, produc
             <div className='flex flex-col justify-between mt-2 flex-grow'>
               <div>
                 <p className="font-medium line-clamp-2 h-12">{product.name}</p>
-                <p className='text-xl font-semibold mt-1'>{formatRupiah(product.price)}</p>
+                <p className='text-xl font-semibold mt-1'>{formatRupiah(product.price - product.discount)}</p>
                 {
                   product.discount > 0 && (
-                    <p className='text-sm text-red-400 line-through'>{formatRupiah(product.price + product.discount)}</p>
+                    <p className='text-sm text-red-400 line-through'>{formatRupiah(product.price)}</p>
                   )
                 }
               </div>
