@@ -5,6 +5,10 @@ import { IoMdHeart } from "react-icons/io"
 import { useState } from "react"
 import { formatRupiah } from "@/lib/helpers"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useSelector } from "react-redux"
+import { RootState } from "@/store/store"
+import { useAddToCart } from "@/services/cart.service"
+import { useNavigate } from "react-router-dom"
 
 export const ProductDisplaySkeleton = () => {
   return (
@@ -31,9 +35,26 @@ export const ProductDisplaySkeleton = () => {
   )
 }
 
-// Original ProductDisplay component remains unchanged
 export const ProductDisplay = ({ data }: { data: Product }) => {
-  const [quantity, setQuantity] = useState<number>(0)
+  const navigate = useNavigate()
+  const cartSelector = useSelector((state: RootState) => state.cart)
+  const userSelector = useSelector((state: RootState) => state.user)
+
+  const [quantity, setQuantity] = useState<number>(cartSelector.items.find(item => item.productId === data.id)?.quantity ?? 0)
+
+  const addToCartMutation = useAddToCart()
+
+  const handleAddToCart = () => {
+    if (!userSelector.id) {
+      return navigate('/login')
+    }
+
+    addToCartMutation.mutate({
+      userId: userSelector.id,
+      productId: data.id,
+      quantity: quantity
+    })
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-24 items-center">
@@ -47,18 +68,23 @@ export const ProductDisplay = ({ data }: { data: Product }) => {
         }
         <p className="text-sm text-muted-foreground mt-4">{data?.description}</p>
 
-        <div className="flex items-center gap-8 mt-6">
-          <Button variant={'ghost'} size={'icon'} onClick={() => setQuantity(quantity - 1)} disabled={quantity === 0}>
-            <FaMinus />
-          </Button>
-          <p className="font-bold">{quantity}</p>
-          <Button variant={'ghost'} size={'icon'} onClick={() => setQuantity(quantity + 1)} >
-            <FaPlus />
-          </Button>
+        <div className="flex justify-between items-center mt-6">
+          <div className="flex items-center gap-8">
+            <Button variant={'ghost'} size={'icon'} onClick={() => setQuantity(quantity - 1)} disabled={quantity === 0}>
+              <FaMinus />
+            </Button>
+            <p className="font-bold">{quantity}</p>
+            <Button variant={'ghost'} size={'icon'} onClick={() => setQuantity(quantity + 1)} disabled={quantity === data.stock}>
+              <FaPlus />
+            </Button>
+          </div>
+
+          <span className="text-sm text-muted-foreground">Stok Produk: {data.stock}</span>
+
         </div>
 
         <div className="flex items-center mt-4 gap-2">
-          <Button className="w-full">Tambahkan ke Keranjang</Button>
+          <Button className="w-full" disabled={quantity === 0} onClick={handleAddToCart}>Tambahkan ke Keranjang</Button>
           <Button size={'icon'} variant={'outline'}>
             <IoMdHeart className="h-6 w-6" />
           </Button>
@@ -67,4 +93,3 @@ export const ProductDisplay = ({ data }: { data: Product }) => {
     </div>
   )
 }
-

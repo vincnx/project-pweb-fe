@@ -61,8 +61,16 @@ export const Header = memo(() => {
                       </div>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
+                      {
+                        userSelector.role === 'admin' &&
+                        <Link to={'/admin'}>
+                          <DropdownMenuItem className="cursor-pointer">
+                            <p>Halaman Admin</p>
+                          </DropdownMenuItem>
+                        </Link>
+                      }
                       <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                        <p className="text-lg text-red-400">Logout</p>
+                        <p className="text-red-400">Logout</p>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
