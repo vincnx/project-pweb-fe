@@ -118,7 +118,7 @@ export function DataTable<TData, TValue>({ columns, data, }: DataTableProps<TDat
         <div className="flex items-center gap-2">
           <span>Baris per halaman</span>
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild>
               <Button variant={"ghost"} size={'icon'} className="flex items-center gap-2">
                 {pagination.pageSize}
                 <FaChevronDown className="h-3 w-3" />

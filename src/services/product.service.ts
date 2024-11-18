@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/lib/axios"
+import { axiosInstance, phpAxiosInstance } from "@/lib/axios"
 import { useQuery } from "@tanstack/react-query"
 
 export const useFetchProducts = (params?: { sort?: string; minPrice?: number; maxPrice?: number; isDiscount?: boolean, limit?: number }) => {
@@ -18,6 +18,16 @@ export const useFetchProducts = (params?: { sort?: string; minPrice?: number; ma
     },
   });
 };
+
+export const useFetchProductsPhp = () => {
+  return useQuery({
+    queryKey: ['fetch.products.php'],
+    queryFn: async () => {
+      const response = await phpAxiosInstance.get('/products')
+      return response.data.data
+    }
+  })
+}
 
 export const useFetchProductById = (productId: string) => {
   return useQuery({

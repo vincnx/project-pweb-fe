@@ -100,7 +100,7 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button variant={'ghost'} size={'icon'}>
               <EllipsisIcon />
             </Button>

@@ -6,7 +6,7 @@ export const SidebarButton = ({ to, children }: { to: string, children: React.Re
   return (
     <Link
       to={to}
-      className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-slate-900 ${location.pathname.startsWith(to) ? 'bg-muted text-slate-900' : 'text-muted-foreground'}`}
+      className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-slate-900 ${location.pathname.endsWith(to) ? 'bg-muted text-slate-900' : 'text-muted-foreground'}`}
     >
       {children}
     </Link>
