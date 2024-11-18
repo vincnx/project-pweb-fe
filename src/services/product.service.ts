@@ -1,5 +1,5 @@
 import { axiosInstance, phpAxiosInstance } from "@/lib/axios"
-import { FormProductSchema } from "@/lib/schema/product/productSchema";
+import { CreateProductSchema, UpdateProductSchema } from "@/lib/schema/product/productSchema";
 import { useMutation, useQuery } from "@tanstack/react-query"
 
 export const useFetchProducts = (params?: { sort?: string; minPrice?: number; maxPrice?: number; isDiscount?: boolean, limit?: number }) => {
@@ -20,6 +20,16 @@ export const useFetchProducts = (params?: { sort?: string; minPrice?: number; ma
   });
 };
 
+export const useFetchProductById = (productId: string) => {
+  return useQuery({
+    queryKey: ['fetch.product', productId],
+    queryFn: async () => {
+      const response = await axiosInstance.get(`/products/${productId}`);
+      return response.data;
+    },
+  });
+};
+
 export const useFetchProductsPhp = () => {
   return useQuery({
     queryKey: ['fetch.products.php'],
@@ -30,21 +40,30 @@ export const useFetchProductsPhp = () => {
   })
 }
 
+export const useFetchProductByIdPhp = (productId: string) => {
+  return useQuery({
+    queryKey: ['fetch.product.php', productId],
+    queryFn: async () => {
+      const response = await phpAxiosInstance.get(`/products/${productId}`)
+      return response.data.data
+    }
+  })
+}
+
 export const useCreateProductPhp = () => {
   return useMutation({
-    mutationFn: async (data: FormProductSchema) => {
+    mutationFn: async (data: CreateProductSchema) => {
       const response = await phpAxiosInstance.post('/products', data)
       return response.data.data
     }
   })
 }
 
-export const useFetchProductById = (productId: string) => {
-  return useQuery({
-    queryKey: ['fetch.product', productId],
-    queryFn: async () => {
-      const response = await axiosInstance.get(`/products/${productId}`);
-      return response.data;
-    },
-  });
-};
+export const useUpdateProductPhp = (productId: string) => {
+  return useMutation({
+    mutationFn: async (data: UpdateProductSchema) => {
+      const response = await phpAxiosInstance.post(`/products/${productId}`, data)
+      return response.data.data
+    }
+  })
+}

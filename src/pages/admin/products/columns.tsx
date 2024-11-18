@@ -106,7 +106,7 @@ export const columns: ColumnDef<Product>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <Link to={`/admin/products/edit/${row.original.id}`}>
+            <Link to={`/admin/product/${row.original.id}/edit`}>
               <DropdownMenuItem className='cursor-pointer'>
                 Edit
               </DropdownMenuItem>

@@ -12,16 +12,20 @@ import {
 } from "@/components/ui/form"
 import { IDRInput, Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react'
-import { CreateProductSchema } from "@/lib/schema/product/productSchema"
-import { useCreateProductPhp } from "@/services/product.service"
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import { UpdateProductSchema } from "@/lib/schema/product/productSchema"
+import { useFetchProductByIdPhp, useUpdateProductPhp } from "@/services/product.service"
 
-const CreateProductPage = () => {
+const EditProductPage = () => {
   const navigate = useNavigate()
+  const { productId } = useParams()
+  const fetchProductByIdQuery = useFetchProductByIdPhp(productId!)
+  const updateProductMutation = useUpdateProductPhp(productId!)
+
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const form = useForm<CreateProductSchema>({
-    resolver: zodResolver(CreateProductSchema),
+  const form = useForm<UpdateProductSchema>({
+    resolver: zodResolver(UpdateProductSchema),
     defaultValues: {
       name: "",
       price: 0,
@@ -29,18 +33,28 @@ const CreateProductPage = () => {
       stock: 1,
       description: "",
       image: undefined,
+      _method: 'PUT'
     }
   })
 
-  const createProductQuery = useCreateProductPhp()
+  const onSubmit = (values: UpdateProductSchema) => {
+    const { image, ...rest } = values
 
-  const onSubmit = (values: CreateProductSchema) => {
-    createProductQuery.mutate(values, {
-      onSuccess: () => {
-        navigate('/admin/product')
-      }
-    })
+    const payload = image instanceof File
+      ? { ...rest, image }
+      : rest
+    console.log(payload)
+    updateProductMutation.mutate(payload)
   }
+
+  useEffect(() => {
+    if (fetchProductByIdQuery.data) {
+      form.reset(fetchProductByIdQuery.data)
+      setImagePreview(fetchProductByIdQuery.data.image)
+    }
+  }, [fetchProductByIdQuery.data, form])
+
+  if (fetchProductByIdQuery.isPending || !fetchProductByIdQuery.data) return <div>Loading...</div>
 
   return (
     <AdminLayout>
@@ -142,14 +156,18 @@ const CreateProductPage = () => {
                     {...rest}
                   />
                 </FormControl>
-                {imagePreview && (
-                  <img src={imagePreview} alt="Preview" className="mt-2 max-w-xs" />
+                {(typeof value === 'string' || imagePreview) && (
+                  <img
+                    src={typeof value === 'string' ? value : imagePreview!}
+                    alt="Preview"
+                    className="mt-2 max-w-xs"
+                  />
                 )}
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit" disabled={createProductQuery.isPending}>Tambahkan Produk</Button>
+          <Button type="submit">Tambahkan Produk</Button>
         </form>
       </Form>
 
@@ -157,4 +175,4 @@ const CreateProductPage = () => {
   )
 }
 
-export default CreateProductPage
+export default EditProductPage
