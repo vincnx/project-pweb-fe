@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom"
+import { Navigate, Route, Routes, useLocation } from "react-router-dom"
 import HomePage from "./pages/HomePage"
 import ProductsPage from "./pages/ProductsPage"
 import AdminProductsPage from "./pages/admin/products/ProductsPage"
@@ -10,6 +10,7 @@ import RegisterPage from "./pages/RegisterPage"
 import CartPage from "./pages/CartPage"
 import { useUserHydration } from "./hooks/useUserHydration"
 import DashboardPage from "./pages/admin/DashboardPage"
+import CreateProductPage from "./pages/admin/products/CreateProductPage"
 
 
 function App() {
@@ -43,7 +44,9 @@ function App() {
         <Route path="/product/:productId" element={<ProductPage />} />
 
         <Route path="/admin">
-          <Route path="" element={<DashboardPage />} />
+          <Route path="" element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="product/create" element={<CreateProductPage />} />
           <Route path="product" element={<AdminProductsPage />} />
         </Route>
 

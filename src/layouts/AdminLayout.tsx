@@ -36,7 +36,7 @@ export const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             </div>
             <div>
               <nav className="grid items-start px-4 text-lg">
-                <SidebarButton to="/admin">
+                <SidebarButton to="/admin/dashboard">
                   <FiHome className="h-6 w-6" />
                   Dashboard
                 </SidebarButton>

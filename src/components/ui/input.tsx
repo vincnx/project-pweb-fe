@@ -3,7 +3,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> { }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
@@ -22,4 +22,41 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 )
 Input.displayName = "Input"
 
-export { Input }
+interface IDRInputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  value: number
+  onChange: (value: number) => void
+}
+
+const IDRInput = React.forwardRef<HTMLInputElement, IDRInputProps>(
+  ({ value, onChange, ...props }, ref) => {
+    const formatIDR = (value: number) => {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value)
+    }
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const rawValue = event.target.value.replace(/[^\d]/g, '')
+      const numericValue = parseInt(rawValue, 10) || 0
+      onChange(numericValue)
+    }
+
+    return (
+      <Input
+        {...props}
+        ref={ref}
+        value={formatIDR(value)}
+        onChange={handleChange}
+        type='text'
+      />
+    )
+  }
+)
+
+IDRInput.displayName = 'IDRInput'
+
+export { Input, IDRInput }
