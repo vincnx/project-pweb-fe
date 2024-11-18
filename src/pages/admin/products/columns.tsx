@@ -1,6 +1,9 @@
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { toast } from '@/hooks/use-toast'
+import { phpAxiosInstance } from '@/lib/axios'
 import { formatRupiah } from '@/lib/helpers'
+import { queryClient } from '@/main'
 import { Product } from '@/types/product'
 import { ColumnDef } from '@tanstack/react-table'
 import { EllipsisIcon } from 'lucide-react'
@@ -98,6 +101,23 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: 'actions',
     header: 'Aksi',
     cell: ({ row }) => {
+
+      const handleDeleteProduct = async () => {
+        try {
+          await phpAxiosInstance.delete(`/products/${row.original.id}`)
+          queryClient.invalidateQueries({ queryKey: ['fetch.products.php'] })
+          toast({
+            title: 'Berhasil',
+            description: 'Produk berhasil dihapus',
+          })
+        } catch (error) {
+          toast({
+            title: 'Gagal',
+            description: 'Produk gagal dihapus',
+          })
+        }
+      }
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -111,7 +131,7 @@ export const columns: ColumnDef<Product>[] = [
                 Edit
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuItem className='cursor-pointer'>
+            <DropdownMenuItem className='cursor-pointer' onClick={handleDeleteProduct}>
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

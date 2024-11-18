@@ -43,7 +43,6 @@ const EditProductPage = () => {
     const payload = image instanceof File
       ? { ...rest, image }
       : rest
-    console.log(payload)
     updateProductMutation.mutate(payload)
   }
 
