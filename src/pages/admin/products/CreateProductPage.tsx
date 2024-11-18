@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react'
 import { CreateProductSchema } from "@/lib/schema/product/productSchema"
 import { useCreateProductPhp } from "@/services/product.service"
+import { toast } from "@/hooks/use-toast"
 
 const CreateProductPage = () => {
   const navigate = useNavigate()
@@ -37,6 +38,10 @@ const CreateProductPage = () => {
   const onSubmit = (values: CreateProductSchema) => {
     createProductQuery.mutate(values, {
       onSuccess: () => {
+        toast({
+          title: 'Berhasil',
+          description: 'Produk berhasil ditambahkan',
+        })
         navigate('/admin/product')
       }
     })
@@ -94,12 +99,18 @@ const CreateProductPage = () => {
           </div>
           <FormField
             control={form.control}
-            name="stock"
+            name='stock'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Stok <span className="text-red-500">*</span></FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="input stok..." {...field} min={1} />
+                  <Input
+                    type='number'
+                    placeholder='input stok...'
+                    min={1}
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

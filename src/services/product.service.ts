@@ -1,5 +1,6 @@
 import { axiosInstance, phpAxiosInstance } from "@/lib/axios"
 import { CreateProductSchema, UpdateProductSchema } from "@/lib/schema/product/productSchema";
+import { queryClient } from "@/main";
 import { useMutation, useQuery } from "@tanstack/react-query"
 
 export const useFetchProducts = (params?: { sort?: string; minPrice?: number; maxPrice?: number; isDiscount?: boolean, limit?: number }) => {
@@ -55,6 +56,9 @@ export const useCreateProductPhp = () => {
     mutationFn: async (data: CreateProductSchema) => {
       const response = await phpAxiosInstance.post('/products', data)
       return response.data.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['fetch.products.php'] })
     }
   })
 }
