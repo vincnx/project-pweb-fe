@@ -68,3 +68,13 @@ export const useLoginPhp = () => {
     }
   })
 }
+
+export const useGetUserByToken = (token: string) => {
+  return useQuery({
+    queryKey: ['user', token],
+    queryFn: async () => {
+      const response = await phpAxiosInstance.get(`/user`)
+      return response.data
+    }
+  })
+}
