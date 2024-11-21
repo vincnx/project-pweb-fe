@@ -4,20 +4,17 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { useLogin } from "@/services/auth.service"
-
-const loginFormSchema = z.object({
-  username: z.string().min(3, 'Username minimal 3 karakter'),
-  password: z.string().min(8, 'Password minimal 8 karakter')
-})
+import { useLoginPhp } from "@/services/auth.service"
+import { loginFormSchema, LoginFormSchema } from "@/types/schema/auth"
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const loginMutation = useLoginPhp()
+  const navigate = useNavigate()
 
   const form = useForm({
     defaultValues: {
@@ -29,9 +26,7 @@ const LoginPage = () => {
     reValidateMode: 'onChange'
   })
 
-  const loginMutation = useLogin()
-  const navigate = useNavigate()
-  const handleLogin = async (values: { username: string, password: string }) => {
+  const handleLogin = async (values: LoginFormSchema) => {
     loginMutation.mutate(values, {
       onSuccess: () => {
         navigate('/')
