@@ -90,6 +90,7 @@ export const useGetUserByToken = (token: string) => {
     queryFn: async () => {
       const response = await phpAxiosInstance.get(`/user`)
       return response.data
-    }
+    },
+    retry: false
   })
 }
