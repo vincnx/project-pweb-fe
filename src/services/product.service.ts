@@ -31,11 +31,23 @@ export const useFetchProductById = (productId: string) => {
   });
 };
 
-export const useFetchProductsPhp = () => {
+export const useFetchProductsPhp = (params?: {
+  sort_price?: string;
+  min_price?: number;
+  max_price?: number;
+  discount?: number;
+}) => {
   return useQuery({
-    queryKey: ['fetch.products.php'],
+    queryKey: ['fetch.products.php', params?.sort_price, params?.min_price, params?.max_price, params?.discount],
     queryFn: async () => {
-      const response = await phpAxiosInstance.get('/products')
+      const response = await phpAxiosInstance.get('/products', {
+        params: {
+          sort_price: params?.sort_price,
+          min_price: params?.min_price,
+          max_price: params?.max_price,
+          discount: params?.discount,
+        }
+      })
       return response.data.data
     }
   })
@@ -68,6 +80,10 @@ export const useUpdateProductPhp = (productId: string) => {
     mutationFn: async (data: UpdateProductSchema) => {
       const response = await phpAxiosInstance.post(`/products/${productId}`, data)
       return response.data.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['fetch.products.php'] })
+      queryClient.invalidateQueries({ queryKey: ['fetch.product.php', productId] })
     }
   })
 }

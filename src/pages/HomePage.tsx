@@ -1,15 +1,13 @@
 
 import { ProductCard, ProductCardGroup, ProductCardSkeleton } from "@/components/ProductCard"
 import { Button } from "@/components/ui/button"
-import { useFetchProducts } from "@/services/product.service"
+import { useFetchProductsPhp } from "@/services/product.service"
 import { Product } from "@/types/product"
 import { Link } from "react-router-dom"
 
 const HomePage = () => {
-  const { data: productsData, isPending: productIsPending, isFetching: productIsFetching, error } = useFetchProducts()
-  const { data: discountProductsData, isPending: discountProductIsPending, isFetching: discountProductIsFetching } = useFetchProducts({ isDiscount: true })
-
-  if (error) return <div>Error: {error.message}</div>
+  const fetchProductsPhp = useFetchProductsPhp()
+  const fetchDiscountProductsPhp = useFetchProductsPhp({ discount: 1 })
 
   return (
     <>
@@ -29,7 +27,7 @@ const HomePage = () => {
         {/* discount cards */}
         <div className="px-8 pb-24">
           <div className="max-w-screen-xl mx-auto">
-            <ProductCardGroup title="Sedang Diskon" titleLink="/product" data={discountProductsData} isPending={discountProductIsPending} isFetching={discountProductIsFetching} />
+            <ProductCardGroup title="Sedang Diskon" titleLink="/product" data={fetchDiscountProductsPhp.data} isPending={fetchDiscountProductsPhp.isPending} isFetching={fetchDiscountProductsPhp.isFetching} />
           </div>
         </div>
 
@@ -42,7 +40,7 @@ const HomePage = () => {
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-2 xl:gap-x-4 gap-y-8">
               {
-                productIsPending || productIsFetching ? (
+                fetchProductsPhp.isPending || fetchProductsPhp.isFetching ? (
                   <>
                     <ProductCardSkeleton />
                     <ProductCardSkeleton />
@@ -50,7 +48,7 @@ const HomePage = () => {
                     <ProductCardSkeleton />
                   </>
                 ) : (
-                  productsData.map((product: Product) => (
+                  fetchProductsPhp.data?.map((product: Product) => (
                     <ProductCard key={product.id} product={product} />
                   ))
                 )
