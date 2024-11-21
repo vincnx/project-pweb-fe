@@ -8,7 +8,7 @@ import { RootState } from "@/store/store"
 import { logout } from "@/store/user/userSlice"
 import { Avatar, AvatarImage } from "./ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { useFetchCart } from "@/services/cart.service"
+import { useFetchCartPhp } from "@/services/cart.service"
 
 export const Header = memo(() => {
   const dispatch = useDispatch()
@@ -20,8 +20,7 @@ export const Header = memo(() => {
     dispatch(logout())
   }
 
-  useFetchCart(userSelector.id)
-
+  useFetchCartPhp()
   return (
     <div className="border-b fixed top-0 left-0 right-0 bg-white bg-opacity-75 backdrop-blur-md z-50">
       <header className="px-8 flex justify-between h-20 items-center max-w-screen-2xl mx-auto gap-4">

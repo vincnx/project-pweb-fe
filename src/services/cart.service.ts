@@ -1,8 +1,9 @@
-import { axiosInstance } from "@/lib/axios"
+import { axiosInstance, phpAxiosInstance } from "@/lib/axios"
 import { getCart } from "@/store/cart/cartSlice"
+import { RootState } from "@/store/store"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useQueryClient } from "@tanstack/react-query"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 export const useFetchCart = (userId: string) => {
   const dispatch = useDispatch()
@@ -60,6 +61,20 @@ export const useRemoveFromCart = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['fetch.cart'] })
+    },
+  })
+}
+
+export const useFetchCartPhp = () => {
+  const dispatch = useDispatch()
+  const userSelector = useSelector((state: RootState) => state.user)
+
+  return useQuery({
+    queryKey: ['fetch.cart.php', userSelector.id],
+    queryFn: async () => {
+      const response = await phpAxiosInstance.get(`/cart`)
+      dispatch(getCart(response.data))
+      return response.data
     },
   })
 }
