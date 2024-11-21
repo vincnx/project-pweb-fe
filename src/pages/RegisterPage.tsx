@@ -3,34 +3,24 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, useNavigate } from "react-router-dom"
 import { useRegister } from "@/services/auth.service"
-
-const RegisterFormSchema = z.object({
-  username: z.string().min(3, 'Username minimal 3 karakter'),
-  password: z.string().min(8, 'Password minimal 8 karakter'),
-  confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Password tidak sama",
-  path: ["confirmPassword"],
-})
+import { registerFormSchema } from "@/types/schema/auth"
 
 const RegisterPage = () => {
+  const registerMutation = useRegister()
+  const navigate = useNavigate()
   const form = useForm({
     defaultValues: {
       username: '',
       password: '',
       confirmPassword: '',
     },
-    resolver: zodResolver(RegisterFormSchema),
+    resolver: zodResolver(registerFormSchema),
     mode: 'onChange',
     reValidateMode: 'onChange'
   })
-
-  const registerMutation = useRegister()
-  const navigate = useNavigate()
 
   const handleRegister = async (values: { username: string, password: string, confirmPassword: string }) => {
     registerMutation.mutate(values, {

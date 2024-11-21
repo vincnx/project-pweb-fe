@@ -1,6 +1,6 @@
 import { axiosInstance, phpAxiosInstance } from "@/lib/axios"
 import { login } from "@/store/user/userSlice"
-import { LoginFormSchema } from "@/types/schema/auth"
+import { LoginFormSchema, RegisterFormSchema } from "@/types/schema/auth"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useDispatch } from "react-redux"
 
@@ -50,6 +50,21 @@ export const useGetUserById = (id: string) => {
     queryFn: async () => {
       const response = await axiosInstance.get<User>(`/users/${id}`)
       return response.data
+    }
+  })
+}
+
+export const useRegisterPhp = () => {
+  const dispatch = useDispatch()
+
+  return useMutation({
+    mutationFn: async (registerData: RegisterFormSchema) => {
+      const response = await phpAxiosInstance.post('/register', registerData)
+      return response.data
+    },
+    onSuccess: (data) => {
+      localStorage.setItem('token', data.token)
+      dispatch(login({ id: data.id, username: data.username, role: data.role }))
     }
   })
 }
