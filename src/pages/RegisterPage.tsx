@@ -5,11 +5,11 @@ import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, useNavigate } from "react-router-dom"
-import { useRegister } from "@/services/auth.service"
+import { useRegisterPhp } from "@/services/auth.service"
 import { registerFormSchema } from "@/types/schema/auth"
 
 const RegisterPage = () => {
-  const registerMutation = useRegister()
+  const registerMutation = useRegisterPhp()
   const navigate = useNavigate()
   const form = useForm({
     defaultValues: {
