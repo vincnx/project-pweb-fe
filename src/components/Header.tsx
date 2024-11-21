@@ -16,7 +16,7 @@ export const Header = memo(() => {
   const cartSelector = useSelector((state: RootState) => state.cart)
 
   const handleLogout = () => {
-    localStorage.removeItem('user')
+    localStorage.removeItem('token')
     dispatch(logout())
   }
 
