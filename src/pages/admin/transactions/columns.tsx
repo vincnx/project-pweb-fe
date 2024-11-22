@@ -1,15 +1,8 @@
 import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { toast } from '@/hooks/use-toast'
-import { phpAxiosInstance } from '@/lib/axios'
 import { formatRupiah } from '@/lib/helpers'
-import { queryClient } from '@/main'
-import { Product } from '@/types/product'
 import { Transaction } from '@/types/transaction'
 import { ColumnDef } from '@tanstack/react-table'
-import { EllipsisIcon } from 'lucide-react'
 import { HiMiniChevronUpDown } from "react-icons/hi2"
-import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import { id } from 'date-fns/locale'
 
@@ -79,58 +72,4 @@ export const columns: ColumnDef<Transaction>[] = [
       return row.original.items.length
     }
   }
-  // {
-  //   accessorKey: 'price',
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button
-  //         variant="ghost"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //         className='flex items-center gap-2'
-  //       >
-  //         Harga
-  //         <HiMiniChevronUpDown className='w-4 h-4' />
-  //       </Button>
-  //     )
-  //   },
-  //   cell: ({ row }) => {
-  //     return formatRupiah(row.original.price)
-  //   }
-  // },
-  // {
-  //   accessorKey: 'discount',
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button
-  //         variant="ghost"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //         className='flex items-center gap-2'
-  //       >
-  //         Diskon
-  //         <HiMiniChevronUpDown className='w-4 h-4' />
-  //       </Button>
-  //     )
-  //   },
-  //   cell: ({ row }) => {
-  //     if (row.original.discount > 0) {
-  //       return <span>{formatRupiah(row.original.discount)}</span>
-  //     }
-  //     return <span>-</span>
-  //   }
-  // },
-  // {
-  //   accessorKey: 'stock',
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button
-  //         variant="ghost"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //         className='flex items-center gap-2'
-  //       >
-  //         Stok
-  //         <HiMiniChevronUpDown className='w-4 h-4' />
-  //       </Button>
-  //     )
-  //   }
-  // }
 ]
