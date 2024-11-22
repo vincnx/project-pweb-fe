@@ -12,6 +12,7 @@ import { useUserHydration } from "./hooks/useUserHydration"
 import DashboardPage from "./pages/admin/DashboardPage"
 import CreateProductPage from "./pages/admin/products/CreateProductPage"
 import EditProductPage from "./pages/admin/products/EditProductPage"
+import TransactionsPage from "./pages/admin/transactions/TransactionsPage"
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
         <Route path="/admin">
           <Route path="" element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="transaction" element={<TransactionsPage />} />
           <Route path="product/create" element={<CreateProductPage />} />
           <Route path="product/:productId/edit" element={<EditProductPage />} />
           <Route path="product" element={<AdminProductsPage />} />

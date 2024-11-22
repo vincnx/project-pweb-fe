@@ -40,9 +40,9 @@ export const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                   <FiHome className="h-6 w-6" />
                   Dashboard
                 </SidebarButton>
-                <SidebarButton to="/admin/order">
+                <SidebarButton to="/admin/transaction">
                   <BiShoppingBag className="h-6 w-6" />
-                  Orders
+                  Transactions
                 </SidebarButton>
                 <SidebarButton to="/admin/product">
                   <FiPackage className="h-6 w-6" />

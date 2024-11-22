@@ -16,6 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react'
 import { UpdateProductSchema } from "@/lib/schema/product/productSchema"
 import { useFetchProductByIdPhp, useUpdateProductPhp } from "@/services/product.service"
+import { toast } from "@/hooks/use-toast"
 
 const EditProductPage = () => {
   const navigate = useNavigate()
@@ -43,7 +44,15 @@ const EditProductPage = () => {
     const payload = image instanceof File
       ? { ...rest, image }
       : rest
-    updateProductMutation.mutate(payload)
+    updateProductMutation.mutate(payload, {
+      onSuccess: () => {
+        toast({
+          title: 'Berhasil',
+          description: 'Produk berhasil diubah',
+        })
+        navigate('/admin/product')
+      }
+    })
   }
 
   useEffect(() => {
@@ -166,7 +175,7 @@ const EditProductPage = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Tambahkan Produk</Button>
+          <Button type="submit">Simpan</Button>
         </form>
       </Form>
 

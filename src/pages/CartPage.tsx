@@ -3,14 +3,14 @@ import { AuthGuard } from "@/components/Guard"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { toast } from "@/hooks/use-toast"
-import { useCreateTransaction } from "@/services/transaction.service"
+import { useCreateTransactionPhp } from "@/services/transaction.service"
 import { RootState } from "@/store/store"
 import React from "react"
 import { useSelector } from "react-redux"
 
 const CartPage = () => {
   const cartSelector = useSelector((state: RootState) => state.cart)
-  const createTransactionMutation = useCreateTransaction()
+  const createTransactionMutation = useCreateTransactionPhp()
 
   const handleCheckout = () => {
     createTransactionMutation.mutate(undefined, {
