@@ -7,7 +7,7 @@ import { formatRupiah } from "@/lib/helpers"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useSelector } from "react-redux"
 import { RootState } from "@/store/store"
-import { useAddToCart } from "@/services/cart.service"
+import { useAddToCartPhp } from "@/services/cart.service"
 import { useNavigate } from "react-router-dom"
 
 export const ProductDisplaySkeleton = () => {
@@ -37,21 +37,19 @@ export const ProductDisplaySkeleton = () => {
 
 export const ProductDisplay = ({ data }: { data: Product }) => {
   const navigate = useNavigate()
-  const cartSelector = useSelector((state: RootState) => state.cart)
   const userSelector = useSelector((state: RootState) => state.user)
 
-  const [quantity, setQuantity] = useState<number>(cartSelector.items.find(item => item.productId === data.id)?.quantity ?? 0)
+  const [quantity, setQuantity] = useState<number>(0)
 
-  const addToCartMutation = useAddToCart()
+  const addToCartPhpMutation = useAddToCartPhp()
 
   const handleAddToCart = () => {
     if (!userSelector.id) {
       return navigate('/login')
     }
 
-    addToCartMutation.mutate({
-      userId: userSelector.id,
-      productId: data.id,
+    addToCartPhpMutation.mutate({
+      product_id: data.id,
       quantity: quantity
     })
   }
@@ -80,7 +78,6 @@ export const ProductDisplay = ({ data }: { data: Product }) => {
           </div>
 
           <span className="text-sm text-muted-foreground">Stok Produk: {data.stock}</span>
-
         </div>
 
         <div className="flex items-center mt-4 gap-2">
