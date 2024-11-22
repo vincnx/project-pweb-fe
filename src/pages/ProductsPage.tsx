@@ -5,21 +5,20 @@ import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer"
 import { useState } from "react"
 import { CgOptions } from "react-icons/cg"
 import { Product } from "@/types/product"
-import { useFetchProducts } from "@/services/product.service"
+import { useFetchProductsPhp } from "@/services/product.service"
 import { useSearchParams } from "react-router-dom"
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams()
   const [sidebarOpen, setSidebarOpen] = useState(true)
-
-  const { data, isPending, error, isFetching } = useFetchProducts({
-    sort: searchParams.get('sort') || undefined,
-    minPrice: Number(searchParams.get('minPrice')) || undefined,
-    maxPrice: Number(searchParams.get('maxPrice')) || undefined,
+  const fetchProductsPhpQuery = useFetchProductsPhp({
+    sort_price: searchParams.get('sort') || undefined,
+    min_price: Number(searchParams.get('minPrice')) || undefined,
+    max_price: Number(searchParams.get('maxPrice')) || undefined,
   })
 
-  if (isPending || isFetching) return <div>Loading...</div>
-  if (error) return <div>Error: {error.message}</div>
+  if (fetchProductsPhpQuery.isPending || fetchProductsPhpQuery.isFetching) return <div>Loading...</div>
+  if (fetchProductsPhpQuery.error) return <div>Error: {fetchProductsPhpQuery.error.message}</div>
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen max-w-screen-xl mx-auto mt-32 px-8 mb-12">
@@ -55,7 +54,7 @@ const ProductsPage = () => {
         {/* product cards */}
         <main className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-2 xl:gap-x-4 gap-y-8 w-full">
           {
-            isPending || isFetching ? (
+            fetchProductsPhpQuery.isPending || fetchProductsPhpQuery.isFetching ? (
               <>
                 <ProductCardSkeleton />
                 <ProductCardSkeleton />
@@ -63,7 +62,7 @@ const ProductsPage = () => {
                 <ProductCardSkeleton />
               </>
             ) : (
-              data.map((product: Product) => (
+              fetchProductsPhpQuery.data.map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
               ))
             )
