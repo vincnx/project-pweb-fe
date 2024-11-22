@@ -7,14 +7,25 @@ export const useUserHydration = () => {
   const dispatch = useDispatch()
   const [isHydrated, setIsHydrated] = useState(false)
   const token = localStorage.getItem('token')
-  const { data: userData } = useGetUserByToken(token || '')
+
+  const { data: userData, isError, isSuccess } = useGetUserByToken(token || '')
 
   useEffect(() => {
-    if (userData) {
-      dispatch(login(userData))
+    if (!token) {
+      setIsHydrated(true)
+      return
     }
-    setIsHydrated(true)
-  }, [userData, dispatch])
+
+    if (isSuccess && userData) {
+      dispatch(login(userData))
+      setIsHydrated(true)
+    }
+
+    if (isError) {
+      localStorage.removeItem('token')
+      setIsHydrated(true)
+    }
+  }, [userData, isSuccess, isError, dispatch, token])
 
   return { isHydrated }
 }
