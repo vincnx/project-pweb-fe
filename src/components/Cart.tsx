@@ -12,25 +12,25 @@ import { ChevronDown, ChevronUp } from "lucide-react"
 import { formatRupiah } from "@/lib/helpers"
 import { useSelector } from "react-redux"
 import { RootState } from "@/store/store"
-import { useRemoveFromCart, useUpdateCart } from "@/services/cart.service"
+import { useRemoveFromCartPhp, useUpdateCartPhp } from "@/services/cart.service"
 import { Link } from "react-router-dom"
 
 export const CartItem = ({ imageUrl, name, price, discount, quantity, stock, cartId, productId }: { imageUrl: string, name: string, price: number, discount: number, quantity: number, stock: number, cartId: string, productId: string }) => {
-  const updateCartMutation = useUpdateCart()
-  const removeFromCartMutation = useRemoveFromCart()
+  const removeFromCartPhpMutation = useRemoveFromCartPhp()
+  const updateCartPhpMutation = useUpdateCartPhp()
 
   const [productQuantity, setProductQuantity] = useState<number>(quantity)
 
   const handleRemoveProduct = () => {
     const confirm = window.confirm("Apakah Anda yakin ingin menghapus produk ini dari keranjang?")
     if (confirm) {
-      removeFromCartMutation.mutate({ cartId })
+      removeFromCartPhpMutation.mutate(cartId)
     }
   }
 
   useEffect(() => {
     const handleUpdateCart = () => {
-      updateCartMutation.mutate({
+      updateCartPhpMutation.mutate({
         cartId,
         quantity: productQuantity
       })

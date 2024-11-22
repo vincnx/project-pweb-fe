@@ -1,4 +1,5 @@
 import { axiosInstance, phpAxiosInstance } from "@/lib/axios"
+import { queryClient } from "@/main"
 import { getCart } from "@/store/cart/cartSlice"
 import { RootState } from "@/store/store"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -81,6 +82,7 @@ export const useFetchCartPhp = () => {
 
 export const useAddToCartPhp = () => {
   const queryClient = useQueryClient()
+  const userSelector = useSelector((state: RootState) => state.user)
 
   return useMutation({
     mutationFn: async ({ product_id, quantity }: { product_id: string; quantity: number }) => {
@@ -88,7 +90,38 @@ export const useAddToCartPhp = () => {
       return response.data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['fetch.cart.php'] })
+      queryClient.invalidateQueries({ queryKey: ['fetch.cart.php', userSelector.id] })
+    }
+  })
+}
+
+export const useUpdateCartPhp = () => {
+  const userSelector = useSelector((state: RootState) => state.user)
+
+  return useMutation({
+    mutationFn: async ({ cartId, quantity }: { cartId: string; quantity: number }) => {
+      const response = await phpAxiosInstance.post(`/cart/${cartId}`, {
+        quantity,
+        _method: 'PUT'
+      })
+      return response.data.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['fetch.cart.php', userSelector.id] })
+    }
+  })
+}
+
+export const useRemoveFromCartPhp = () => {
+  const userSelector = useSelector((state: RootState) => state.user)
+
+  return useMutation({
+    mutationFn: async (cartId: string) => {
+      const response = await phpAxiosInstance.delete(`/cart/${cartId}`)
+      return response.data.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['fetch.cart.php', userSelector.id] })
     }
   })
 }
