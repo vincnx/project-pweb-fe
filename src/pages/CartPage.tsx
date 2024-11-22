@@ -2,12 +2,25 @@ import { CartItem, CartSummary } from "@/components/Cart"
 import { AuthGuard } from "@/components/Guard"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { toast } from "@/hooks/use-toast"
+import { useCreateTransaction } from "@/services/transaction.service"
 import { RootState } from "@/store/store"
 import React from "react"
 import { useSelector } from "react-redux"
 
 const CartPage = () => {
   const cartSelector = useSelector((state: RootState) => state.cart)
+  const createTransactionMutation = useCreateTransaction()
+
+  const handleCheckout = () => {
+    createTransactionMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast({
+          title: "Berhasil membuat transaksi",
+        })
+      }
+    })
+  }
 
   return (
     <AuthGuard>
@@ -39,7 +52,7 @@ const CartPage = () => {
           <div className="col-span-12 lg:col-span-5 flex-col hidden lg:flex">
             <CartSummary />
             <Separator className="my-4" />
-            <Button className="w-full">Checkout</Button>
+            <Button className="w-full" onClick={handleCheckout}>Checkout</Button>
           </div>
         </div>
 
@@ -47,7 +60,7 @@ const CartPage = () => {
           <div className="flex flex-col mb-4">
             <CartSummary />
           </div>
-          <Button className="w-full">Checkout</Button>
+          <Button className="w-full" onClick={handleCheckout}>Checkout</Button>
         </div>
       </main>
     </AuthGuard>
