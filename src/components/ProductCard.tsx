@@ -6,23 +6,21 @@ import { Link, useNavigate } from "react-router-dom"
 import { useRef, useState, useEffect, useCallback } from "react"
 import { Product } from "@/types/product"
 import { formatRupiah } from "@/lib/helpers"
-import { useAddToCart } from "@/services/cart.service"
+import { useAddToCartPhp } from "@/services/cart.service"
 import { RootState } from "@/store/store"
 import { useSelector } from "react-redux"
 
 export const ProductCard = ({ className, product }: { className?: string, product: Product }) => {
   const userSelector = useSelector((state: RootState) => state.user)
   const navigate = useNavigate()
-  const addToCartMutation = useAddToCart()
+  const addToCartPhpMutation = useAddToCartPhp()
 
   const handleAddToCart = () => {
     if (!userSelector.id) {
       return navigate('/login')
     }
-
-    addToCartMutation.mutate({
-      userId: userSelector.id,
-      productId: product.id,
+    addToCartPhpMutation.mutate({
+      product_id: product.id,
       quantity: 1
     })
   }

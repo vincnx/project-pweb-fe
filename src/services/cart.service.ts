@@ -73,8 +73,22 @@ export const useFetchCartPhp = () => {
     queryKey: ['fetch.cart.php', userSelector.id],
     queryFn: async () => {
       const response = await phpAxiosInstance.get(`/cart`)
-      dispatch(getCart(response.data))
+      dispatch(getCart(response.data.data))
+      return response.data.data
+    },
+  })
+}
+
+export const useAddToCartPhp = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ product_id, quantity }: { product_id: string; quantity: number }) => {
+      const response = await phpAxiosInstance.post('/cart', { product_id, quantity })
       return response.data
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['fetch.cart.php'] })
+    }
   })
 }
