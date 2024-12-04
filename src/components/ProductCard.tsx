@@ -9,6 +9,9 @@ import { formatRupiah } from "@/lib/helpers"
 import { useAddToCartPhp } from "@/services/cart.service"
 import { RootState } from "@/store/store"
 import { useSelector } from "react-redux"
+import { toast } from "@/hooks/use-toast"
+import { AxiosError } from "axios"
+import { ErrorResponse } from "@/types/response/errorResponse.types"
 
 export const ProductCard = ({ className, product }: { className?: string, product: Product }) => {
   const userSelector = useSelector((state: RootState) => state.user)
@@ -22,6 +25,14 @@ export const ProductCard = ({ className, product }: { className?: string, produc
     addToCartPhpMutation.mutate({
       product_id: product.id,
       quantity: 1
+    }, {
+      onError: (error) => {
+        const axiosError = error as AxiosError<ErrorResponse>
+        toast({
+          title: "Gagal menambahkan ke keranjang",
+          description: axiosError.response?.data.message,
+        })
+      }
     })
   }
 

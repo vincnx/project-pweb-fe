@@ -44,16 +44,19 @@ export const Header = memo(() => {
 
         <div className="flex items-center gap-4 h-6">
           <div className="flex gap-2">
-            <Link to={'/cart'} className="relative">
-              <Button variant={'ghost'} size={'icon'}>
-                <IoBagOutline className="w-6 h-6" />
-              </Button>
-              {cartSelector.items.length > 0 && (
-                <span className="absolute transform -top-2 -right-2 flex items-center justify-center w-6 h-6 text-xs font-bold leading-none text-white bg-green-600 rounded-full">
-                  {cartSelector.items.length}
-                </span>
-              )}
-            </Link>
+            {
+              userSelector.role !== 'admin' &&
+              <Link to={'/cart'} className="relative">
+                <Button variant={'ghost'} size={'icon'}>
+                  <IoBagOutline className="w-6 h-6" />
+                </Button>
+                {cartSelector.items.length > 0 && (
+                  <span className="absolute transform -top-2 -right-2 flex items-center justify-center w-6 h-6 text-xs font-bold leading-none text-white bg-green-600 rounded-full">
+                    {cartSelector.items.length}
+                  </span>
+                )}
+              </Link>
+            }
             <Button variant={'ghost'} size={'icon'}>
               <IoHeartOutline className="w-6 h-6" />
             </Button>

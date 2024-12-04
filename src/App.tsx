@@ -13,11 +13,14 @@ import DashboardPage from "./pages/admin/DashboardPage"
 import CreateProductPage from "./pages/admin/products/CreateProductPage"
 import EditProductPage from "./pages/admin/products/EditProductPage"
 import TransactionsPage from "./pages/admin/transactions/TransactionsPage"
+import { useSelector } from "react-redux"
+import { RootState } from "./store/store"
 
 
 function App() {
   const location = useLocation()
   const { isHydrated } = useUserHydration()
+  const userSelector = useSelector((state: RootState) => state.user)
 
   const showHeader = !(
     location.pathname === '/login' ||
@@ -41,7 +44,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        <Route path="/cart" element={<CartPage />} />
+        <Route path="/cart" element={userSelector.role === 'admin' ? <Navigate to="/" replace /> : <CartPage />} />
         <Route path="/product" element={<ProductsPage />} />
         <Route path="/product/:productId" element={<ProductPage />} />
 
