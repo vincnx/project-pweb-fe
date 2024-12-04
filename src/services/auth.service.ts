@@ -1,96 +1,115 @@
-import { axiosInstance, phpAxiosInstance } from "@/lib/axios"
-import { login } from "@/store/user/userSlice"
-import { LoginFormSchema, RegisterFormSchema } from "@/types/schema/auth"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { useDispatch } from "react-redux"
+import { axiosInstance, phpAxiosInstance } from "@/lib/axios";
+import { login } from "@/store/user/userSlice";
+import { LoginFormSchema, RegisterFormSchema } from "@/types/schema/auth";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
 
 interface User {
-  id: string
-  username: string
-  role: string
+  id: string;
+  username: string;
+  role: string;
 }
 
 export const useLogin = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   return useMutation({
-    mutationFn: async ({ username, password }: { username: string; password: string }) => {
-      const response = await axiosInstance.get<User[]>('/users', {
+    mutationFn: async ({
+      username,
+      password,
+    }: {
+      username: string;
+      password: string;
+    }) => {
+      const response = await axiosInstance.get<User[]>("/users", {
         params: {
           username,
-          password
-        }
-      })
-      return response.data
+          password,
+        },
+      });
+      return response.data;
     },
     onSuccess: (data) => {
-      localStorage.setItem('user', data[0].id)
-      dispatch(login(data[0]))
-    }
-  })
-}
+      localStorage.setItem("user", data[0].id);
+      dispatch(login(data[0]));
+    },
+  });
+};
 
 export const useRegister = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   return useMutation({
-    mutationFn: async ({ username, password }: { username: string; password: string }) => {
-      const response = await axiosInstance.post('/users', { username, password })
-      return response.data
+    mutationFn: async ({
+      username,
+      password,
+    }: {
+      username: string;
+      password: string;
+    }) => {
+      const response = await axiosInstance.post("/users", {
+        username,
+        password,
+      });
+      return response.data;
     },
     onSuccess: (data) => {
-      localStorage.setItem('user', data.id)
-      dispatch(login(data))
-    }
-  })
-}
+      localStorage.setItem("user", data.id);
+      dispatch(login(data));
+    },
+  });
+};
 
 export const useGetUserById = (id: string) => {
   return useQuery({
-    queryKey: ['user', id],
+    queryKey: ["user", id],
     queryFn: async () => {
-      const response = await axiosInstance.get<User>(`/users/${id}`)
-      return response.data
-    }
-  })
-}
+      const response = await axiosInstance.get<User>(`/users/${id}`);
+      return response.data;
+    },
+  });
+};
 
 export const useRegisterPhp = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   return useMutation({
     mutationFn: async (registerData: RegisterFormSchema) => {
-      const response = await phpAxiosInstance.post('/register', registerData)
-      return response.data
+      const response = await phpAxiosInstance.post("/register", registerData);
+      return response.data;
     },
     onSuccess: (data) => {
-      localStorage.setItem('token', data.token)
-      dispatch(login({ id: data.id, username: data.username, role: data.role }))
-    }
-  })
-}
+      localStorage.setItem("token", data.token);
+      dispatch(
+        login({ id: data.id, username: data.username, role: data.role })
+      );
+    },
+  });
+};
 
 export const useLoginPhp = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   return useMutation({
     mutationFn: async (loginData: LoginFormSchema) => {
-      const response = await phpAxiosInstance.post('/login', loginData)
-      return response.data
+      const response = await phpAxiosInstance.post("/login", loginData);
+      return response.data;
     },
     onSuccess: (data) => {
-      localStorage.setItem('token', data.token)
-      dispatch(login({ id: data.id, username: data.username, role: data.role }))
-    }
-  })
-}
+      localStorage.setItem("token", data.token);
+      dispatch(
+        login({ id: data.id, username: data.username, role: data.role })
+      );
+    },
+  });
+};
 
 export const useGetUserByToken = (token: string) => {
   return useQuery({
-    queryKey: ['user', token],
+    queryKey: ["user", token],
     queryFn: async () => {
-      const response = await phpAxiosInstance.get(`/user`)
-      return response.data
+      const response = await phpAxiosInstance.get(`/user`);
+      return response.data;
     },
-    retry: false
-  })
-}
+    retry: false,
+  });
+};

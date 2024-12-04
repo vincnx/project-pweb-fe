@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, useNavigate } from "react-router-dom"
 import { useRegisterPhp } from "@/services/auth.service"
 import { registerFormSchema } from "@/types/schema/auth"
+import { toast } from "@/hooks/use-toast"
 
 const RegisterPage = () => {
   const registerMutation = useRegisterPhp()
@@ -26,6 +27,14 @@ const RegisterPage = () => {
     registerMutation.mutate(values, {
       onSuccess: () => {
         navigate('/')
+        toast({
+          title: "Berhasil register",
+        })
+      },
+      onError: () => {
+        toast({
+          title: "Gagal register",
+        })
       }
     })
   }
@@ -86,9 +95,10 @@ const RegisterPage = () => {
             <CardFooter>
               <div className="flex flex-col space-y-4 w-full">
                 <Button type="submit" disabled={!form.formState.isValid}>Daftar</Button>
-                <Link to={'/login'}>
-                  <Button variant={"link"} className="w-full">Sudah punya akun?</Button>
-                </Link>
+                <div className="flex items-center justify-between">
+                  <Link to={'/login'} className="text-sm font-semibold hover:underline">Sudah punya akun?</Link>
+                  <Link to={'/'} className="text-sm text-muted-foreground hover:underline">Masuk sebagai guest</Link>
+                </div>
               </div>
             </CardFooter>
           </Card>
