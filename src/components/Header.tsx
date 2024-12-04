@@ -9,6 +9,8 @@ import { logout } from "@/store/user/userSlice"
 import { Avatar, AvatarImage } from "./ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { useFetchCartPhp } from "@/services/cart.service"
+import { getCart } from "@/store/cart/cartSlice"
+import { toast } from "@/hooks/use-toast"
 
 export const Header = memo(() => {
   const dispatch = useDispatch()
@@ -20,6 +22,10 @@ export const Header = memo(() => {
   const handleLogout = () => {
     localStorage.removeItem('token')
     dispatch(logout())
+    dispatch(getCart([]))
+    toast({
+      title: "Berhasil logout",
+    })
   }
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     navigate({
