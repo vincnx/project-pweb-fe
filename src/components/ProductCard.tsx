@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { Skeleton } from "./ui/skeleton"
-import { IoIosArrowBack, IoIosArrowForward, IoMdHeart } from "react-icons/io"
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 import { Link, useNavigate } from "react-router-dom"
 import { useRef, useState, useEffect, useCallback } from "react"
 import { Product } from "@/types/product"
@@ -31,6 +31,11 @@ export const ProductCard = ({ className, product }: { className?: string, produc
         toast({
           title: "Gagal menambahkan ke keranjang",
           description: axiosError.response?.data.message,
+        })
+      },
+      onSuccess: () => {
+        toast({
+          title: "Berhasil menambahkan ke keranjang",
         })
       }
     })
@@ -67,9 +72,9 @@ export const ProductCard = ({ className, product }: { className?: string, produc
           <Button className="flex-1" onClick={handleAddToCart}>
             Tambahkan ke Keranjang
           </Button>
-          <Button variant={"outline"} size={"icon"}>
+          {/* <Button variant={"outline"} size={"icon"}>
             <IoMdHeart className="w-6 h-6" />
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>

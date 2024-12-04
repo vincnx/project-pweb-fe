@@ -1,7 +1,6 @@
 import { IoAdd, IoRemove } from "react-icons/io5"
 import { Button } from "./ui/button"
 import { useEffect, useState } from "react"
-import { IoMdHeart } from "react-icons/io"
 import { Separator } from "./ui/separator"
 import {
   Collapsible,
@@ -14,6 +13,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "@/store/store"
 import { useRemoveFromCartPhp, useUpdateCartPhp } from "@/services/cart.service"
 import { Link } from "react-router-dom"
+import { toast } from "@/hooks/use-toast"
 
 export const CartItem = ({ imageUrl, name, price, discount, quantity, stock, cartId, productId }: { imageUrl: string, name: string, price: number, discount: number, quantity: number, stock: number, cartId: string, productId: string }) => {
   const removeFromCartPhpMutation = useRemoveFromCartPhp()
@@ -25,6 +25,9 @@ export const CartItem = ({ imageUrl, name, price, discount, quantity, stock, car
     const confirm = window.confirm("Apakah Anda yakin ingin menghapus produk ini dari keranjang?")
     if (confirm) {
       removeFromCartPhpMutation.mutate(cartId)
+      toast({
+        title: "Berhasil menghapus produk dari keranjang",
+      })
     }
   }
 
@@ -101,9 +104,9 @@ export const CartItem = ({ imageUrl, name, price, discount, quantity, stock, car
 
         <div className="flex gap-2 w-full">
           <Button onClick={handleRemoveProduct} className="flex-1 sm:flex-none">Hapus dari Keranjang</Button>
-          <Button variant={"outline"} size={"icon"}>
+          {/* <Button variant={"outline"} size={"icon"}>
             <IoMdHeart className="w-6 h-6" />
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>

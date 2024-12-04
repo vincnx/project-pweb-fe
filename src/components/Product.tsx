@@ -1,7 +1,7 @@
 import { Product } from "@/types/product"
 import { Button } from "./ui/button"
 import { FaMinus, FaPlus } from "react-icons/fa6"
-import { IoMdHeart } from "react-icons/io"
+// import { IoMdHeart } from "react-icons/io"
 import { useState } from "react"
 import { formatRupiah } from "@/lib/helpers"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -9,6 +9,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "@/store/store"
 import { useAddToCartPhp } from "@/services/cart.service"
 import { useNavigate } from "react-router-dom"
+import { toast } from "@/hooks/use-toast"
 
 export const ProductDisplaySkeleton = () => {
   return (
@@ -39,7 +40,7 @@ export const ProductDisplay = ({ data }: { data: Product }) => {
   const navigate = useNavigate()
   const userSelector = useSelector((state: RootState) => state.user)
 
-  const [quantity, setQuantity] = useState<number>(0)
+  const [quantity, setQuantity] = useState<number>(1)
 
   const addToCartPhpMutation = useAddToCartPhp()
 
@@ -51,6 +52,12 @@ export const ProductDisplay = ({ data }: { data: Product }) => {
     addToCartPhpMutation.mutate({
       product_id: data.id,
       quantity: quantity
+    }, {
+      onSuccess: () => {
+        toast({
+          title: "Berhasil menambahkan ke keranjang",
+        })
+      }
     })
   }
 
@@ -68,7 +75,7 @@ export const ProductDisplay = ({ data }: { data: Product }) => {
 
         <div className="flex justify-between items-center mt-6">
           <div className="flex items-center gap-8">
-            <Button variant={'ghost'} size={'icon'} onClick={() => setQuantity(quantity - 1)} disabled={quantity === 0}>
+            <Button variant={'ghost'} size={'icon'} onClick={() => setQuantity(quantity - 1)} disabled={quantity === 1}>
               <FaMinus />
             </Button>
             <p className="font-bold">{quantity}</p>
@@ -81,10 +88,10 @@ export const ProductDisplay = ({ data }: { data: Product }) => {
         </div>
 
         <div className="flex items-center mt-4 gap-2">
-          <Button className="w-full" disabled={quantity === 0} onClick={handleAddToCart}>Tambahkan ke Keranjang</Button>
-          <Button size={'icon'} variant={'outline'}>
+          <Button className="w-full" disabled={quantity < 1} onClick={handleAddToCart}>Tambahkan ke Keranjang</Button>
+          {/* <Button size={'icon'} variant={'outline'}>
             <IoMdHeart className="h-6 w-6" />
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>
