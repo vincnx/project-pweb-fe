@@ -7,6 +7,7 @@ import { CgOptions } from "react-icons/cg"
 import { Product } from "@/types/product"
 import { useFetchProductsPhp } from "@/services/product.service"
 import { useSearchParams } from "react-router-dom"
+import { cn } from "@/lib/utils"
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams()
@@ -15,9 +16,9 @@ const ProductsPage = () => {
     sort_price: searchParams.get('sort') || undefined,
     min_price: Number(searchParams.get('minPrice')) || undefined,
     max_price: Number(searchParams.get('maxPrice')) || undefined,
+    search: searchParams.get('search') || undefined,
   })
 
-  if (fetchProductsPhpQuery.isPending || fetchProductsPhpQuery.isFetching) return <div>Loading...</div>
   if (fetchProductsPhpQuery.error) return <div>Error: {fetchProductsPhpQuery.error.message}</div>
 
   return (
@@ -52,25 +53,25 @@ const ProductsPage = () => {
         </div>
 
         {/* product cards */}
-        <main className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-2 xl:gap-x-4 gap-y-8 w-full">
+        <main className={cn(
+          'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-2 xl:gap-x-4 gap-y-8 w-full',
+          (!fetchProductsPhpQuery.isLoading && fetchProductsPhpQuery.data?.length === 0) ? 'flex flex-1 justify-center items-center h-full' : '',
+        )}>
           {
-            fetchProductsPhpQuery.isPending || fetchProductsPhpQuery.isFetching ? (
+            fetchProductsPhpQuery.isPending || fetchProductsPhpQuery.isLoading || fetchProductsPhpQuery.isFetching ? (
               <>
-                <ProductCardSkeleton />
-                <ProductCardSkeleton />
-                <ProductCardSkeleton />
-                <ProductCardSkeleton />
+                {Array.from({ length: 4 }, (_, index) => (
+                  <ProductCardSkeleton key={index} />
+                ))}
               </>
             ) : (
-              fetchProductsPhpQuery.data.map((product: Product) => (
-                <ProductCard key={product.id} product={product} />
-              ))
+              fetchProductsPhpQuery.data.length > 0 ?
+                fetchProductsPhpQuery.data.map((product: Product) => (
+                  <ProductCard key={product.id} product={product} />
+                )) :
+                (<h1 className="text-2xl font-semibold">Produk tidak ditemukan</h1>)
             )
           }
-          <ProductCardSkeleton />
-          <ProductCardSkeleton />
-          <ProductCardSkeleton />
-          <ProductCardSkeleton />
         </main>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { createSearchParams, Link, useNavigate } from "react-router-dom"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { IoBagOutline, IoHeartOutline } from "react-icons/io5"
@@ -12,15 +12,23 @@ import { useFetchCartPhp } from "@/services/cart.service"
 
 export const Header = memo(() => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const userSelector = useSelector((state: RootState) => state.user)
   const cartSelector = useSelector((state: RootState) => state.cart)
+  useFetchCartPhp()
 
   const handleLogout = () => {
     localStorage.removeItem('token')
     dispatch(logout())
   }
-
-  useFetchCartPhp()
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    navigate({
+      pathname: '/product',
+      search: createSearchParams({
+        search: e.currentTarget.value
+      }).toString()
+    })
+  }
   return (
     <div className="border-b fixed top-0 left-0 right-0 bg-white bg-opacity-75 backdrop-blur-md z-50">
       <header className="px-8 flex justify-between h-20 items-center max-w-screen-2xl mx-auto gap-4">
@@ -28,7 +36,11 @@ export const Header = memo(() => {
           <p className="text-3xl font-bold hover:cursor-pointer">Alfiah.</p>
         </Link>
 
-        <Input className="max-w-96 hidden sm:block" placeholder="Search..." />
+        <Input
+          className="max-w-96 hidden sm:block"
+          placeholder='Search...'
+          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.value.trim() !== '' && handleSearch(e)}
+        />
 
         <div className="flex items-center gap-4 h-6">
           <div className="flex gap-2">
