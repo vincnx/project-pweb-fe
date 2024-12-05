@@ -10,6 +10,8 @@ import { RootState } from "@/store/store"
 import { useAddToCartPhp } from "@/services/cart.service"
 import { useNavigate } from "react-router-dom"
 import { toast } from "@/hooks/use-toast"
+import { AxiosError } from "axios"
+import { ErrorResponse } from "@/types/response/errorResponse.types"
 
 export const ProductDisplaySkeleton = () => {
   return (
@@ -57,7 +59,14 @@ export const ProductDisplay = ({ data }: { data: Product }) => {
         toast({
           title: "Berhasil menambahkan ke keranjang",
         })
-      }
+      },
+      onError: (error) => {
+        const axiosError = error as AxiosError<ErrorResponse>
+        toast({
+          title: "Gagal menambahkan ke keranjang",
+          description: axiosError.response?.data.message,
+        })
+      },
     })
   }
 

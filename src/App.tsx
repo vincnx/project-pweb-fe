@@ -15,6 +15,7 @@ import EditProductPage from "./pages/admin/products/EditProductPage"
 import TransactionsPage from "./pages/admin/transactions/TransactionsPage"
 import { useSelector } from "react-redux"
 import { RootState } from "./store/store"
+import { useEffect } from 'react'
 
 
 function App() {
@@ -33,6 +34,10 @@ function App() {
     location.pathname === '/cart' ||
     location.pathname.startsWith('/admin')
   )
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location])
 
   if (!isHydrated) return <div>Loading...</div>
 

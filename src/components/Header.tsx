@@ -1,7 +1,7 @@
 import { createSearchParams, Link, useNavigate } from "react-router-dom"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
-import { IoBagOutline, IoHeartOutline } from "react-icons/io5"
+import { IoBagOutline } from "react-icons/io5"
 import { memo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/store/store"
@@ -63,9 +63,9 @@ export const Header = memo(() => {
                 )}
               </Link>
             }
-            <Button variant={'ghost'} size={'icon'}>
+            {/* <Button variant={'ghost'} size={'icon'}>
               <IoHeartOutline className="w-6 h-6" />
-            </Button>
+            </Button> */}
           </div>
           <div className="flex gap-2 items-center">
             {
